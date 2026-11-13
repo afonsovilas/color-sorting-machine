@@ -44,8 +44,15 @@ Total cost of the final components: about €96.
  
 ## Possible improvements
  
-- **LCD display** showing how many pieces of each colour have been sorted, which would be useful in an industrial setting.
-- **Mobile app via Bluetooth** to start and stop the machine, reset the counter and change which colour goes to each compartment.
+### Hardware and features
+- **LCD display** showing how many pieces of each colour have been sorted since the program started. In an industrial setting, this would count the pieces without needing an operator.
+- **Mobile app via Bluetooth** (e.g. an HC-06 module) to start and stop the machine, show and reset the piece counter, and change which colour goes to each compartment.
+- **External power for the servomotors.** Powering the servos and the webcam through the Raspberry Pi overloads the board and raises its temperature, which may reduce its performance and lifespan. Only the webcam should be powered by the Raspberry Pi.
+### Software
+- **More robust colour detection:** average the colour over a small region instead of reading a single pixel, making detection less sensitive to lighting and noise.
+- **Error handling:** check that each frame is read successfully from the camera, so the program does not crash if the webcam disconnects.
+- **Clean shutdown:** stop the PWM signals and call `GPIO.cleanup()` when the program exits.
+- **Simpler control logic:** start the second servo only once, and replace the separate timer variables with a list of timed steps (a simple state machine) to make the code easier to read and change.
 ## Applications
  
 Sorting sweets has no commercial use, but the same principle is widely used in industry, for example to classify components by colour, separate materials in recycling plants, or inspect products on production lines.
@@ -54,9 +61,10 @@ Sorting sweets has no commercial use, but the same principle is widely used in i
  
 - `report/` – full project report (in Portuguese)
 - `images/` – photos of the machine
-- `src/` – Python source code [if available]
+- `src/colour_sorter.py` – Python source code
 ## Credits
  
 - Developed by Afonso Vilas.
 - Supervised by teachers at Colégio Internato dos Carvalhos.
 - The 3D model of the machine's structure was adapted from [this design on Thingiverse](https://www.thingiverse.com/thing:4355784).
+ 
